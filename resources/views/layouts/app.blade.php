@@ -29,11 +29,12 @@
                 <div class="flex items-center justify-between h-16">
                     <!-- Logo or Brand -->
                     <div class="logo animate-logo-beat mb-6">
-            <img src="/images/logoportafolio.png" alt="Logo MusicTime" style="height: 55px;"> 
-        </div>
-        <div>
-        </div>
-        
+                        <!-- Recomendación: Usar asset() para el logo -->
+                        <img src="{{ asset('images/logoportafolio.png') }}" alt="Logo MusicTime" style="height: 55px;"> 
+                    </div>
+                    <div>
+                    </div>
+                    
                     <!-- Mobile Menu Button -->
                     <button class="md:hidden text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md p-2" 
                             type="button" 
@@ -161,7 +162,8 @@
             <div class="container mx-auto flex items-center justify-between">
                 <!-- Información de la canción -->
                 <div class="flex items-center space-x-4">
-                    <img id="player-cover" src="{{ asset('storage/default-cover.png') }}" alt="Portada" class="w-12 h-12 rounded">
+                    <!-- Corrección: Usar secure_asset para la imagen por defecto -->
+                    <img id="player-cover" src="{{ secure_asset('storage/covers/default-cover.png') }}" alt="Portada" class="w-12 h-12 rounded">
                     <div>
                         <p id="player-title" class="text-white font-medium">Selecciona una canción</p>
                         <p id="player-artist" class="text-gray-400 text-sm">Artista</p>

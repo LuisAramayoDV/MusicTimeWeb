@@ -15,7 +15,8 @@
                         @if ($song->cover_image && Storage::disk('public')->exists('covers/' . basename($song->cover_image)))
                             <img src="{{ asset('storage/covers/' . basename($song->cover_image)) }}" alt="{{ $song->title ?? 'Sin título' }}" class="w-full h-48 object-cover">
                         @else
-                            <img src="{{ asset('storage/covers/default-cover.png') }}" alt="Portada por defecto" class="w-full h-48 object-cover">
+                            <!-- Corrección: Usar secure_asset para generar la URL correcta con HTTPS -->
+                            <img src="{{ secure_asset('storage/covers/default-cover.png') }}" alt="Portada por defecto" class="w-full h-48 object-cover">
                         @endif
                         <!-- Botón de play -->
                         @if ($song->audio_path && Storage::disk('public')->exists('songs/' . basename($song->audio_path)))
@@ -23,7 +24,7 @@
                                     data-song-id="{{ $song->id }}"
                                     data-title="{{ e($song->title ?? 'Sin título') }}"
                                     data-artist="{{ e($song->artist->name ?? 'Desconocido') }}"
-                                    data-cover="{{ $song->cover_image && Storage::disk('public')->exists('covers/' . basename($song->cover_image)) ? asset('storage/covers/' . basename($song->cover_image)) : asset('storage/covers/default-cover.png') }}"
+                                    data-cover="{{ $song->cover_image && Storage::disk('public')->exists('covers/' . basename($song->cover_image)) ? asset('storage/covers/' . basename($song->cover_image)) : secure_asset('storage/covers/default-cover.png') }}" <!-- Corrección: Usar secure_asset -->
                                     data-audio="{{ asset('storage/songs/' . basename($song->audio_path)) }}">
                                 <svg class="w-12 h-12 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -146,7 +147,7 @@
                     id: {{ $song->id }},
                     title: "{{ e($song->title ?? 'Sin título') }}",
                     artist: "{{ e($song->artist->name ?? 'Desconocido') }}",
-                    cover: "{{ $song->cover_image && Storage::disk('public')->exists('covers/' . basename($song->cover_image)) ? asset('storage/covers/' . basename($song->cover_image)) : asset('storage/covers/default-cover.png') }}",
+                    cover: "{{ $song->cover_image && Storage::disk('public')->exists('covers/' . basename($song->cover_image)) ? asset('storage/covers/' . basename($song->cover_image)) : secure_asset('storage/covers/default-cover.png') }}", <!-- Corrección: Usar secure_asset -->
                     audio: "{{ asset('storage/songs/' . basename($song->audio_path)) }}"
                 },
             @endif
