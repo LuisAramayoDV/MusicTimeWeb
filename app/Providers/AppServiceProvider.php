@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Playlist;
 use App\Policies\PlaylistPolicy;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,5 +29,10 @@ class AppServiceProvider extends ServiceProvider
     {
         // Registrar la política de Playlist
         Gate::policy(Playlist::class, PlaylistPolicy::class);
+
+        // Forzar HTTPS en entornos que no sean local
+        if ($this->app->environment('production', 'staging')) {
+            URL::forceScheme('https');
+        }
     }
 }

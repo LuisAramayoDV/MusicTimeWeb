@@ -8,6 +8,7 @@ use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\ReproductionController;
 
 // Ruta principal (home)
 Route::get('/', function () {
@@ -35,8 +36,8 @@ Route::middleware(['auth'])->group(function () {
     // Superadmin
     Route::get('/superadmin/dashboard', [SuperAdminController::class, 'superAdminDashboard'])->name('superadmin.dashboard');
 
-    // Recurso completo para canciones
-    Route::resource('songs', SongController::class);
+    // Recurso para canciones, excluyendo show
+    Route::resource('songs', SongController::class)->except(['show']);
 
     // Recurso completo para géneros
     Route::resource('genres', GenreController::class);
@@ -45,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
 // Rutas públicas
 Route::get('/songs/most-played', [SongController::class, 'mostPlayed'])->name('songs.mostPlayed');
 Route::post('/songs/{id}/play', [SongController::class, 'play'])->name('songs.play');
+Route::post('/reproductions', [ReproductionController::class, 'store'])->name('reproductions.store');
 
 // Playlists
 Route::resource('playlists', PlaylistController::class);

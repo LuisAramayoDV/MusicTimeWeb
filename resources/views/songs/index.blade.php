@@ -12,19 +12,18 @@
                 <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl">
                     <!-- Portada -->
                     <div class="relative">
-                        @if ($song->cover_image && Storage::disk('public')->exists('covers/' . basename($song->cover_image)))
-                            <img src="{{ secure_asset('storage/covers/' . basename($song->cover_image)) }}" alt="{{ $song->title }}" class="w-full h-48 object-cover">
+                        @if ($song->cover_image && file_exists(storage_path('app/public/' . $song->cover_image)))
+                            <img src="{{ asset('storage/' . $song->cover_image) }}" alt="{{ $song->title }}" class="w-full h-48 object-cover">
                         @else
-                            <!-- Corrección: Usar secure_asset y ruta correcta -->
-                            <img src="{{ secure_asset('storage/covers/default-cover.png') }}" alt="Portada por defecto" class="w-full h-48 object-cover">
+                            <img src="{{ asset('storage/default-cover.png') }}" alt="Portada por defecto" class="w-full h-48 object-cover">
                         @endif
                         <!-- Botón de play en hover -->
                         <button class="play-song absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity" 
                                 data-song-id="{{ $song->id }}"
                                 data-title="{{ $song->title }}"
                                 data-artist="{{ $song->artist->name ?? 'Desconocido' }}"
-                                data-cover="{{ $song->cover_image && Storage::disk('public')->exists('covers/' . basename($song->cover_image)) ? secure_asset('storage/covers/' . basename($song->cover_image)) : secure_asset('storage/covers/default-cover.png') }}" <!-- Corrección: Usar secure_asset y ruta correcta -->
-                                data-audio="{{ $song->audio_path && Storage::disk('public')->exists('songs/' . basename($song->audio_path)) ? secure_asset('storage/songs/' . basename($song->audio_path)) : '' }}">
+                                data-cover="{{ $song->cover_image ? asset('storage/' . $song->cover_image) : asset('storage/default-cover.png') }}"
+                                data-audio="{{ $song->audio_path && file_exists(storage_path('app/public/' . $song->audio_path)) ? asset('storage/' . $song->audio_path) : '' }}">
                             <svg class="w-12 h-12 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -73,11 +72,11 @@
         currentSound = new Howl({
             src: [songData.audio],
             html5: true,
-            volume: document.getElementById('player-volume')?.value || 0.5,
+            volume: document.getElementById('player-volume').value,
             onplay: function() {
                 document.getElementById('player-play').innerHTML = `
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 0 11-18 0 9 9 0 0118 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>`;
                 document.getElementById('player').classList.remove('hidden');
                 document.getElementById('player-title').textContent = songData.title;
@@ -113,7 +112,7 @@
         if (currentSongIndex < playlist.length - 1) {
             playSong(playlist[++currentSongIndex], currentSongIndex);
         } else {
-            currentSound?.stop();
+            currentSound.stop();
             document.getElementById('player').classList.add('hidden');
         }
     }
@@ -132,10 +131,10 @@
                 id: {{ $song->id }},
                 title: "{{ $song->title }}",
                 artist: "{{ $song->artist->name ?? 'Desconocido' }}",
-                cover: "{{ $song->cover_image && Storage::disk('public')->exists('covers/' . basename($song->cover_image)) ? secure_asset('storage/covers/' . basename($song->cover_image)) : secure_asset('storage/covers/default-cover.png') }}", <!-- Corrección: Usar secure_asset y ruta correcta -->
-                audio: "{{ $song->audio_path && Storage::disk('public')->exists('songs/' . basename($song->audio_path)) ? secure_asset('storage/songs/' . basename($song->audio_path)) : '' }}"
+                cover: "{{ $song->cover_image ? asset('storage/' . $song->cover_image) : asset('storage/default-cover.png') }}",
+                audio: "{{ $song->audio_path && file_exists(storage_path('app/public/' . $song->audio_path)) ? asset('storage/' . $song->audio_path) : '' }}"
             },
-        @endforeach
+            @endforeach
     ];
 
     // Evento para reproducir canción
@@ -154,7 +153,7 @@
     });
 
     // Controles del reproductor
-    document.getElementById('player-play')?.addEventListener('click', () => {
+    document.getElementById('player-play').addEventListener('click', () => {
         if (currentSound && currentSound.playing()) {
             currentSound.pause();
             document.getElementById('player-play').innerHTML = `
@@ -166,22 +165,22 @@
             currentSound.play();
             document.getElementById('player-play').innerHTML = `
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 0 11-18 0 9 9 0 0118 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>`;
         }
     });
 
-    document.getElementById('player-next')?.addEventListener('click', playNext);
-    document.getElementById('player-prev')?.addEventListener('click', playPrev);
+    document.getElementById('player-next').addEventListener('click', playNext);
+    document.getElementById('player-prev').addEventListener('click', playPrev);
 
-    document.getElementById('player-progress')?.addEventListener('input', (e) => {
+    document.getElementById('player-progress').addEventListener('input', (e) => {
         if (currentSound) {
             const seek = (e.target.value / 100) * currentSound.duration();
             currentSound.seek(seek);
         }
     });
 
-    document.getElementById('player-volume')?.addEventListener('input', (e) => {
+    document.getElementById('player-volume').addEventListener('input', (e) => {
         if (currentSound) {
             currentSound.volume(e.target.value);
         }

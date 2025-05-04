@@ -28,13 +28,10 @@
             <div class="container mx-auto px-4">
                 <div class="flex items-center justify-between h-16">
                     <!-- Logo or Brand -->
-                    <div class="logo animate-logo-beat mb-6">
-                        <!-- Recomendación: Usar asset() para el logo -->
-                        <img src="{{ asset('images/logoportafolio.png') }}" alt="Logo MusicTime" style="height: 55px;"> 
-                    </div>
-                    <div>
-                    </div>
-                    
+                    <img src="{{ asset('images/logo3.png') }}" alt="Logo MusicTime" style="height: 100px;">
+
+                    <div></div>
+
                     <!-- Mobile Menu Button -->
                     <button class="md:hidden text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md p-2" 
                             type="button" 
@@ -49,7 +46,7 @@
                     </button>
 
                     <!-- Navbar Content -->
-                    <div class="hidden md:flex md:items-center md:w-full" id="navbarSupportedContent">
+               <div class="hidden md:flex md:items-center md:w-full" id="navbarSupportedContent">
                         @php
                             use App\Models\Genre;
                             $genres = Genre::all();
@@ -105,7 +102,6 @@
                                 </a>
                             </li>
                         </ul>
-
                         <!-- Right Side -->
                         <ul class="ml-auto flex items-center space-x-6">
                             @guest
