@@ -7,20 +7,17 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'MusicTimeWeb') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Inter:400,500,600,700" rel="stylesheet">
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Styles -->
+    @vite(['resources/css/app.css'])
 
-    <!-- Howler.js CDN -->
+    <!-- Howler.js CDN (puede reemplazarse por instalación local si prefieres) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
-
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-900 text-white font-inter">
     <div id="app">
@@ -28,7 +25,7 @@
             <div class="container mx-auto px-4">
                 <div class="flex items-center justify-between h-16">
                     <!-- Logo or Brand -->
-                    <img src="{{ asset('images/logo3.png') }}" alt="Logo MusicTime" style="height: 100px;">
+                    <img src="{{ asset('images/logo3.png') }}" alt="Logo MusicTime" class="h-16">
 
                     <div></div>
 
@@ -46,7 +43,7 @@
                     </button>
 
                     <!-- Navbar Content -->
-               <div class="hidden md:flex md:items-center md:w-full" id="navbarSupportedContent">
+                    <div class="hidden md:flex md:items-center md:w-full" id="navbarSupportedContent">
                         @php
                             use App\Models\Genre;
                             $genres = Genre::all();
@@ -158,8 +155,7 @@
             <div class="container mx-auto flex items-center justify-between">
                 <!-- Información de la canción -->
                 <div class="flex items-center space-x-4">
-                    <!-- Corrección: Usar secure_asset para la imagen por defecto -->
-                    <img id="player-cover" src="{{ secure_asset('storage/covers/default-cover.png') }}" alt="Portada" class="w-12 h-12 rounded">
+                    <img id="player-cover" src="" alt="Portada" class="w-12 h-12 rounded" onerror="this.src='https://via.placeholder.com/150?text=Sin+Portada'">
                     <div>
                         <p id="player-title" class="text-white font-medium">Selecciona una canción</p>
                         <p id="player-artist" class="text-gray-400 text-sm">Artista</p>
@@ -170,7 +166,7 @@
                 <div class="flex items-center space-x-4">
                     <button id="player-prev" class="text-gray-300 hover:text-indigo-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8 0h16" />
                         </svg>
                     </button>
                     <button id="player-play" class="text-gray-300 hover:text-indigo-400">
@@ -181,7 +177,7 @@
                     </button>
                     <button id="player-next" class="text-gray-300 hover:text-indigo-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m-8 0h16" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8 0h-16" />
                         </svg>
                     </button>
                 </div>
